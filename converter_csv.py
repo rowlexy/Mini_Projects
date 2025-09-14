@@ -1,6 +1,7 @@
 # Loop through all Excel files in a folder, convert them to .csv, and save in a new folder.
 from pathlib import Path
 import csv, shutil, openpyxl
+import pandas as pd
 
 # move the excel files in the current directory to a new folder => excel folder
 def move_excel_file():
@@ -55,8 +56,31 @@ def excel_to_csv_converter(input_folder, output_folder):
             csv_files_moved += 1
     if csv_files_moved > 0:
         print(f'{csv_files_moved} files moved to {csv_folder}')
+        
+        
+def csv_file_merge(csv_path, output_file):
+    csv_folder = Path(csv_path)
+    csv_file_list = []
+    for file in csv_folder.iterdir():
+        if file.suffix == '.csv':
+            # read each csv file
+            csv_file = pd.read_csv(file)
+            csv_file_list.append(csv_file)
+    # Checking for csv files
+    if csv_file_list:
+        merged_file = pd.concat(csv_file_list, ignore_index=True)
+        merged_file.to_csv(output_file, index=False)
+        print(f'Successfully merged {len(csv_file_list)} CSV files into merged.csv')
+    else:
+        print('No CSV files found in csv_folder')
+        
+    
+     
 
 if __name__ == '__main__':
     input_folder = 'excel_path'
     output_folder = 'csv_folder'
+    csv_path = 'csv_folder'
+    output_file = 'merged.csv'
     excel_to_csv_converter(input_folder, output_folder)
+    csv_file_merge(csv_path, output_file)
