@@ -1,4 +1,5 @@
 # Loop through all Excel files in a folder, convert them to .csv, and save in a new folder.
+# Merge all the csv files into a mastersheet
 from pathlib import Path
 import csv, shutil, openpyxl
 import pandas as pd
@@ -65,6 +66,7 @@ def csv_file_merge(csv_path, output_file):
         if file.suffix == '.csv':
             # read each csv file
             csv_file = pd.read_csv(file)
+            # append the file to the list
             csv_file_list.append(csv_file)
     # Checking for csv files
     if csv_file_list:
@@ -74,8 +76,6 @@ def csv_file_merge(csv_path, output_file):
     else:
         print('No CSV files found in csv_folder')
         
-    
-     
 
 if __name__ == '__main__':
     input_folder = 'excel_path'
