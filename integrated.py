@@ -76,7 +76,7 @@ PORT = 587
 sender = os.getenv('EMAIL')
 password = os.getenv('PASSWORD')
 contact_names = os.getenv('NAMES').split(',')
-contact_email_address = os.getenv('NAMES').split(',')
+contact_email_address = os.getenv('RECIPIENTS').split(',')
 
 contact_email_list = [email for email in contact_email_address]
 contact_name_list = [name for name in contact_names]
@@ -111,14 +111,14 @@ def send_email(subject, body, contact_email, contact_name, attachment):
         print(f'Email not sent to recipient: {e}')
 
 def send_personalised_email(subject, body, attachment):
-    try:
-        if len(contact_name_list) != len(contact_email_list):
-            print(f'Names of contact: {len(contact_name_list)} must be equal to their email addresses: {len(contact_email_list)}')
-            return
-        for contact_email, contact_name in zip(contact_email_list, contact_name_list):
+    if len(contact_name_list) != len(contact_email_list):
+        print(f'Names of contact: {len(contact_name_list)} must be equal to their email addresses: {len(contact_email_list)}')
+        return
+    for contact_email, contact_name in zip(contact_email_list, contact_name_list):
+        try:
             send_email(subject, body, contact_email, contact_name, attachment)
-    except Exception as e:
-        print(f'Error, email not sent to{contact_name}: {e}')        
+        except Exception as e:
+            print(f'Error, email not sent to{contact_name}: {e}')        
     
 if __name__ == '__main__':
     input_pdf = 'Invoice_Collection.pdf'
